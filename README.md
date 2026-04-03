@@ -1,11 +1,11 @@
-# Pakur Mart Admin Panel 🚀
+# Errand Magics Admin Panel 🚀
 
 [![Built with React](https://img.shields.io/badge/Built%20with-React-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-A premium, high-performance administrative dashboard designed for **Pakur Mart** (formerly Bolpur Mart). This application manages the entire ecosystem including products, multi-vendor operations, order lifecycles, and delivery logistics.
+A premium, high-performance administrative dashboard designed for **Errand Magics**. This application manages the entire ecosystem including products, multi-vendor operations, order lifecycles, and delivery logistics.
 
 ---
 
@@ -173,4 +173,4 @@ firebase deploy
 
 ---
 
-Made with ❤️ for **Pakur Mart**.
+Made with ❤️ for **Errand Magics**.

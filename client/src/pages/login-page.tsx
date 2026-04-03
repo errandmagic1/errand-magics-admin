@@ -41,7 +41,7 @@ export function LoginPage() {
           {/* Header */}
           <div className="text-center lg:text-left">
             <div className="flex items-center justify-center mb-6">
-              <img src="/errand-magics-logo.png" alt="ErrandMagics Logo" className="h-16 w-auto" />
+              <img src="/errand-magics-logo.png" alt="ErrandMagics Logo" className="h-32 w-auto" />
             </div>
             <h2 className="text-4xl font-light text-gray-900 mb-2">ErrandMagics</h2>
             <p className="text-gray-600">Admin Panel</p>

@@ -1,8 +1,8 @@
-# Pakur Mart Admin Panel
+# Errand Magics Admin Panel
 
 ## Overview
 
-This is a comprehensive React-based admin panel for Pakur Mart, an online delivery service. The application is designed as a modern web application using React with TypeScript, featuring a corporate aesthetic with professional blue-gray theming. The system provides role-based access control for administrators and sub-administrators to manage products, vendors, orders, and users efficiently.
+This is a comprehensive React-based admin panel for Errand Magics, an online delivery service. The application is designed as a modern web application using React with TypeScript, featuring a corporate aesthetic with professional blue-gray theming. The system provides role-based access control for administrators and sub-administrators to manage products, vendors, orders, and users efficiently.
 
 
 The application follows a full-stack architecture with a React frontend using shadcn/ui components, an Express.js backend, and Firebase Firestore for data persistence. It's designed to be responsive across desktop, tablet, and mobile devices while maintaining a clean, intuitive user interface.
