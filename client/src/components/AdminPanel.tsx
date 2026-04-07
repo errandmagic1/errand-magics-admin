@@ -871,7 +871,7 @@ const AdminPanel: React.FC = () => {
           </div>
           {!sidebarCollapsed && (
             <div>
-              <h1 className="text-xl font-bold text-foreground">Bolpur Mart</h1>
+              <h1 className="text-xl font-bold text-foreground">Errand Magics</h1>
               <p className="text-sm text-muted-foreground">Enterprise Admin Panel</p>
             </div>
           )}
@@ -2276,7 +2276,7 @@ const AdminPanel: React.FC = () => {
                       </div>
                       <div>
                         <p className="font-medium">System Administrator</p>
-                        <p className="text-sm text-muted-foreground">admin@bolpurmart.com</p>
+                        <p className="text-sm text-muted-foreground">admin@errandmagics.com</p>
                       </div>
                     </div>
                   </TableCell>

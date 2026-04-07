@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, Upload, X, Image as ImageIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -46,8 +46,11 @@ export function CategoriesManagement({
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    imageUrl: "",
     isActive: true,
   });
+  const [imageUploading, setImageUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   console.log("Categories data:", categories);
 
@@ -69,8 +72,10 @@ export function CategoriesManagement({
     setFormData({
       name: "",
       description: "",
+      imageUrl: "",
       isActive: true,
     });
+    setImagePreview("");
     setEditingCategory(null);
   };
 
@@ -102,10 +107,78 @@ export function CategoriesManagement({
     setFormData({
       name: category.name,
       description: category.description || "",
+      imageUrl: category.imageUrl || "",
       isActive: category.isActive,
     });
+    setImagePreview(category.imageUrl || "");
     setIsCreateDialogOpen(true);
   };
+
+  const uploadImageToCloudinary = async (file: File) => {
+    const cloudinaryData = new FormData()
+    cloudinaryData.append("file", file)
+    cloudinaryData.append("upload_preset", "Images")
+    cloudinaryData.append("asset_folder", "CategoriesImage")
+    cloudinaryData.append("cloud_name", "dqoo1d1ip")
+    
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/dqoo1d1ip/image/upload`,
+      {
+        method: 'POST',
+        body: cloudinaryData,
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.status} ${response.statusText}`)
+    }
+
+    const data = await response.json()
+    return data.secure_url
+  }
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"]
+    if (!validTypes.includes(file.type)) {
+      alert("Please upload a valid image file (JPEG, PNG, GIF, WebP)")
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size must be less than 5MB")
+      return
+    }
+
+    try {
+      setImageUploading(true)
+      
+      const previewUrl = URL.createObjectURL(file)
+      setImagePreview(previewUrl)
+
+      const cloudinaryUrl = await uploadImageToCloudinary(file)
+      
+      setFormData(prev => ({ ...prev, imageUrl: cloudinaryUrl }))
+      
+      URL.revokeObjectURL(previewUrl)
+      setImagePreview(cloudinaryUrl)
+      
+    } catch (error: any) {
+      console.error("Error uploading image:", error)
+      alert("Failed to upload image. Please try again.")
+      setImagePreview("")
+      setFormData(prev => ({ ...prev, imageUrl: "" }))
+    } finally {
+      setImageUploading(false)
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setImagePreview("")
+    setFormData(prev => ({ ...prev, imageUrl: "" }))
+  }
 
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
@@ -134,10 +207,25 @@ export function CategoriesManagement({
       key: "name" as keyof Category,
       title: "Category Name",
       render: (value: any, record: Category) => ( 
-        <div>
-          <div className="font-medium text-foreground">{record.name}</div>
-          <div className="text-sm text-muted-foreground">
-            {truncateDescription(record.description)}
+        <div className="flex items-center gap-3">
+          {record.imageUrl ? (
+            <div className="h-10 w-10 rounded-lg overflow-hidden bg-muted flex-shrink-0 border">
+              <img 
+                src={record.imageUrl} 
+                alt={record.name} 
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0 border">
+              <ImageIcon className="h-5 w-5 text-muted-foreground" />
+            </div>
+          )}
+          <div>
+            <div className="font-medium text-foreground">{record.name}</div>
+            <div className="text-sm text-muted-foreground">
+              {truncateDescription(record.description)}
+            </div>
           </div>
         </div>
       ),
@@ -201,6 +289,63 @@ export function CategoriesManagement({
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
+                <Label>Category Image</Label>
+                {!imagePreview ? (
+                  <div className="border border-dashed border-muted-foreground/25 rounded-lg p-4 text-center hover:border-muted-foreground/50 transition-colors">
+                    <div className="space-y-2">
+                      <ImageIcon className="mx-auto h-8 w-8 text-muted-foreground" />
+                      <div className="space-y-1">
+                        <Label htmlFor="image-upload" className="cursor-pointer">
+                          <div className="flex items-center justify-center gap-2 text-sm font-medium">
+                            {imageUploading ? (
+                              <>
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                                Uploading...
+                              </>
+                            ) : (
+                              <>
+                                <Upload className="h-3 w-3" />
+                                Click to upload
+                              </>
+                            )}
+                          </div>
+                        </Label>
+                      </div>
+                      <Input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        disabled={imageUploading || isSubmitting}
+                        className="sr-only"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <div className="relative w-full h-24 rounded-lg overflow-hidden bg-muted border">
+                      <img
+                        src={imagePreview}
+                        alt="Category preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={handleRemoveImage}
+                          disabled={imageUploading || isSubmitting}
+                          className="h-7 w-7 p-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="name">Category Name</Label>
                 <Input
                   id="name"
@@ -248,7 +393,7 @@ export function CategoriesManagement({
                 </Button>
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || imageUploading}
                   className="min-w-[120px]"
                 >
                   {isSubmitting ? (

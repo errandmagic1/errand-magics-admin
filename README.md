@@ -87,7 +87,7 @@ graph LR
 ## 📂 Project Structure
 
 ```text
-bolpurmart-admin/
+errand-magics-admin/
 ├── client/                 # Frontend Application
 │   ├── src/
 │   │   ├── components/     # UI & Feature Components

@@ -344,6 +344,8 @@ export function Settings({
     const categoryRef: CategoryReference = {
       id: category.id,
       name: category.name,
+      imageUrl: category.imageUrl,
+      description: category.description,
     }
 
     if (checked) {

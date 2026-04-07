@@ -81,6 +81,7 @@ export interface Category {
   id: string;
   name: string;
   description: string;
+  imageUrl?: string;
   isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -89,6 +90,8 @@ export interface Category {
 export interface CategoryReference {
   id: string;
   name: string;
+  imageUrl?: string;
+  description?: string;
 }
 
 export interface TimeSlot {
